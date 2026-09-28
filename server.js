@@ -10,6 +10,9 @@ const createEventLog = require('./lib/eventlog'), createSurveillance = require('
 const PORT = process.env.PORT ?? 3000;
 const DIR = process.env.DATA_DIR || __dirname, FILE = path.join(DIR, 'data.json'), JOURNAL = path.join(DIR, 'journal.log');
 const EVENTS = path.join(DIR, 'events'), ALERTS = path.join(DIR, 'alerts.log');
+
+fs.mkdirSync(DIR, { recursive: true });
+fs.mkdirSync(EVENTS, { recursive: true });
 const DEMO = process.env.DEMO_TRICKSTER !== '0';                  // trickster demo buttons (set DEMO_TRICKSTER=0 to disable on a public deployment)
 const MAX_DAILY = +process.env.MAX_DAILY_QTY || 10000;          // risk rule: max shares per symbol per user per day
 const RATE_LIMIT = +process.env.RATE_LIMIT || 300;              // trading/auth requests per minute per IP
