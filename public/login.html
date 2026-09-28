@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login – NovaX</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f5f6f8;color:#394046;font:14px/1.5 Inter,-apple-system,"Segoe UI",system-ui,sans-serif}
+.wrap{display:grid;grid-template-columns:1fr 1fr;width:min(860px,94vw);background:#fff;border:1px solid #e8eaed;border-radius:6px;overflow:hidden;box-shadow:0 8px 30px #0000000d}
+.hero{background:linear-gradient(135deg,#387ed1,#2a5ea6);color:#fff;padding:44px 36px;display:flex;flex-direction:column;justify-content:center}
+.hero h1{margin:0 0 10px;font-size:26px;font-weight:600}.hero p{margin:0;opacity:.85}.hero ul{margin:22px 0 0;padding:0;list-style:none;opacity:.9}.hero li{margin:6px 0}
+.form{padding:44px 36px}.logo{font-weight:700;font-size:18px;margin-bottom:22px}.logo b{color:#387ed1}
+h2{margin:0 0 16px;font-size:18px;font-weight:600}
+.tabs{display:flex;gap:22px;border-bottom:1px solid #e8eaed;margin-bottom:8px}.tabs a{padding-bottom:8px;color:#8a9199;cursor:pointer;font-weight:500}.tabs a.on{color:#387ed1;border-bottom:2px solid #387ed1}
+label{display:block;margin:14px 0 4px;color:#8a9199;font-size:12px}
+input{width:100%;padding:10px 11px;border:1px solid #d5d9de;border-radius:3px;font:inherit;color:inherit}input:focus{outline:0;border-color:#387ed1}
+button{width:100%;margin-top:20px;padding:11px;background:#387ed1;color:#fff;border:0;border-radius:3px;font:inherit;font-weight:500;cursor:pointer}button:disabled{opacity:.6}
+#err{color:#df514c;min-height:20px;margin:10px 0 0;font-size:13px}.note{color:#8a9199;font-size:12px;margin-top:14px}
+@media(max-width:700px){.wrap{grid-template-columns:1fr}.hero{display:none}}
+</style></head><body>
+<div class="wrap"><div class="hero"><h1>Trade on NovaX</h1><p>A simulated stock exchange with a real order book and price-time matching.</p>
+<ul><li>✓ $100,000 in virtual cash</li><li>✓ 12 stocks, live order book</li><li>✓ USD, INR, EUR, GBP, JPY</li></ul></div>
+<form class="form" id="f"><div class="logo">NOVA<b>X</b></div>
+<div class="tabs"><a id="t1" class="on">Login</a><a id="t2">Sign up</a></div>
+<label>Username</label><input id="un" autocomplete="username" autofocus required>
+<label>Password</label><input id="pw" type="password" autocomplete="current-password" required>
+<p id="err"></p><button id="go">Login</button><p class="note" id="nt">Passwords need at least 6 characters when signing up.</p></form></div>
+<script>
+const $=s=>document.querySelector(s);let reg=false;
+fetch('/api/me').then(r=>{if(r.ok)location.href='/'});
+function mode(r){reg=r;$('#t1').classList.toggle('on',!r);$('#t2').classList.toggle('on',r);$('#go').textContent=r?'Create account':'Login';$('#err').textContent='';$('#pw').autocomplete=r?'new-password':'current-password'}
+$('#t1').onclick=()=>mode(false);$('#t2').onclick=()=>mode(true);
+$('#f').onsubmit=async e=>{e.preventDefault();$('#go').disabled=true;$('#err').textContent='';
+ try{const r=await fetch(reg?'/api/register':'/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('#un').value.trim(),password:$('#pw').value})});
+  const j=await r.json().catch(()=>({error:'Unexpected server response'}));if(!r.ok)throw j.error||'Error';location.href='/'}
+ catch(x){$('#err').textContent=typeof x=='string'?x:'Cannot reach the server. Is it running?'}$('#go').disabled=false};
+</script></body></html>

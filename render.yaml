@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: novax-exchange
+    runtime: docker
+    plan: starter
+    disk: {name: data, mountPath: /data, sizeGB: 1}

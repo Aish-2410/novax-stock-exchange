@@ -1,0 +1,16 @@
+services:
+  novax:
+    build: .
+    container_name: novax-exchange
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      DATA_DIR: /data
+      DEMO_TRICKSTER: "0"
+    volumes:
+      - novax-data:/data
+    restart: unless-stopped
+
+volumes:
+  novax-data:

@@ -1,0 +1,12 @@
+node_modules/
+.env
+data/
+events/
+*.log
+.DS_Store
+node_modules
+data.json
+data.json.tmp
+journal.log
+alerts.log
+events/
